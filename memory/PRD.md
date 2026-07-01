@@ -26,16 +26,21 @@ Build a web admin dashboard for a Nigerian career services app called **JobJapa*
 
 ## What's Been Implemented (2026-07-01)
 - Distinctive design system per `/app/design_guidelines.json`: Deep Emerald + Ochre palette, Outfit + IBM Plex Sans, sharp 1px-border surfaces
-- Sticky top nav with brand, data-source indicator, and Refresh action
+- Sticky top nav with brand, data-source indicator (Mock preview vs Supabase live), and Refresh action
 - Preview-mode banner explaining how to swap in real Supabase creds
 - Three stat cards with icons and helper text (Total Users, Pro Subscribers, Monthly Revenue)
-- Users table: search (phone), status filter (All/Pro/Free/Expired), pagination (10/page)
+- Users table: **Name (with initials avatar)**, phone, subscription badge, CV rewrites, joined date. Search covers name + phone. Status filter (All/Pro/Free/Expired). Pagination.
 - Payments table: search (reference), status filter (All/Success/Pending/Failed), pagination (10/page)
 - Skeleton loaders, empty-state rows, error banner
-- Full data-testid coverage for every interactive/informational element
-- Seeded mock dataset (47 users, 68 payments) with at least 18 successful payments dated inside the current month so the revenue stat is meaningful in preview
+- **Auto-fallback** in `fetchUsers()`: if Supabase reports `name` column missing, retries without it
+- **Friendly error banner** with copy-pasteable SQL to create `users` + `payments` tables when Supabase returns "table not found"
+- Full data-testid coverage
 - Backend `/api/health` endpoint (supervisor liveness only)
-- E2E tests via testing subagent — 100% pass rate (iteration_1.json)
+
+## Live Supabase
+- URL: `https://dhewlsldkmysrpghuvvi.supabase.co`
+- Anon key wired in `/app/frontend/.env`
+- **Tables not yet created** in the Supabase project — dashboard shows a banner with ready-to-run SQL. Once the SQL is executed in Supabase → SQL Editor, the dashboard populates automatically on next Refresh.
 
 ## File Map
 - `/app/frontend/src/App.js` — dashboard shell, stats, refresh, banners

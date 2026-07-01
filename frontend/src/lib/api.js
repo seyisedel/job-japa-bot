@@ -41,10 +41,19 @@ export async function fetchUsers() {
     await new Promise((r) => setTimeout(r, 250));
     return { data: MOCK_USERS, error: null, source: "mock" };
   }
-  const { data, error } = await supabase
+  // Try with `name` column first; if it doesn't exist, fall back gracefully.
+  let { data, error } = await supabase
     .from("users")
-    .select("id, phone_number, subscription_status, cv_rewrites_used, created_at")
+    .select("id, name, phone_number, subscription_status, cv_rewrites_used, created_at")
     .order("created_at", { ascending: false });
+  if (error && /column .*name.* does not exist/i.test(error.message || "")) {
+    const retry = await supabase
+      .from("users")
+      .select("id, phone_number, subscription_status, cv_rewrites_used, created_at")
+      .order("created_at", { ascending: false });
+    data = retry.data;
+    error = retry.error;
+  }
   return { data: data || [], error, source: "supabase" };
 }
 

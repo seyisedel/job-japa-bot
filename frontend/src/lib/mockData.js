@@ -33,11 +33,24 @@ function ref() {
 }
 
 const seedUsers = () => {
+  const NAMES = [
+    "Chinedu Okafor", "Aisha Bello", "Tunde Adeyemi", "Ngozi Eze", "Emeka Obi",
+    "Fatima Ibrahim", "Kunle Balogun", "Amaka Nwosu", "Segun Adebayo", "Zainab Musa",
+    "Ifeanyi Okonkwo", "Halima Yusuf", "Damilola Ojo", "Chiamaka Uche", "Bola Ajayi",
+    "Yetunde Ogun", "Chukwuemeka Nnamdi", "Rashidat Salami", "Obinna Iheanacho",
+    "Kemi Adekunle", "Musa Danladi", "Blessing Okoro", "Femi Bankole", "Hadiza Aliyu",
+    "Chinelo Umeh", "Sola Bakare", "Ngozika Chukwu", "Adaeze Nkem", "Ibrahim Sani",
+    "Titilayo Ade", "Chidi Anozie", "Uzoamaka Egwu", "Bashir Umar", "Funmilayo Oke",
+    "Ebuka Nwachukwu", "Ronke Adeoti", "Yakubu Bello", "Adaora Onyeka", "Kelechi Duru",
+    "Modupe Ilori", "Nnaemeka Obi", "Aminat Lawal", "Chiwendu Amadi", "Toluwani Fashola",
+    "Ismail Garba", "Ijeoma Chinweike", "Tobiloba Adeoye",
+  ];
   const rows = [];
   for (let i = 0; i < 47; i++) {
     const sub = pick(SUB_STATUSES);
     rows.push({
       id: `u_${i + 1}`,
+      name: NAMES[i % NAMES.length],
       phone_number: phone(),
       subscription_status: sub,
       cv_rewrites_used: sub === "pro" ? rand(0, 12) : rand(0, 3),

@@ -15,6 +15,7 @@ export default function UsersTable({ users, loading }) {
     return users.filter((u) => {
       const matchQ =
         !query ||
+        (u.name || "").toLowerCase().includes(query) ||
         (u.phone_number || "").toLowerCase().includes(query) ||
         (u.id || "").toLowerCase().includes(query);
       const matchF =
@@ -61,7 +62,7 @@ export default function UsersTable({ users, loading }) {
                 setQ(e.target.value);
                 setPage(1);
               }}
-              placeholder="Search phone…"
+              placeholder="Search name or phone…"
               className="pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-sm bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand focus:border-brand w-56"
             />
           </div>
@@ -94,6 +95,7 @@ export default function UsersTable({ users, loading }) {
         >
           <thead className="bg-gray-50">
             <tr>
+              <Th>Name</Th>
               <Th>Phone Number</Th>
               <Th>Subscription</Th>
               <Th align="right">CV Rewrites</Th>
@@ -102,12 +104,12 @@ export default function UsersTable({ users, loading }) {
           </thead>
           <tbody>
             {loading ? (
-              <SkeletonRows cols={4} />
+              <SkeletonRows cols={5} />
             ) : rows.length === 0 ? (
               <tr>
                 <td
                   data-testid="users-empty"
-                  colSpan={4}
+                  colSpan={5}
                   className="px-6 py-14 text-center text-sm text-gray-500"
                 >
                   No users match the current filters.
@@ -120,7 +122,17 @@ export default function UsersTable({ users, loading }) {
                   data-testid={`user-row-${u.id}`}
                   className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
                 >
-                  <td className="px-6 py-3 font-mono-num text-gray-900">
+                  <td className="px-6 py-3">
+                    <div className="flex items-center gap-3">
+                      <span className="h-8 w-8 grid place-items-center rounded-full bg-emerald-50 text-brand text-xs font-semibold border border-emerald-100">
+                        {getInitials(u.name)}
+                      </span>
+                      <span className="font-medium text-gray-900">
+                        {u.name || <span className="text-gray-400 italic">Unnamed</span>}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-3 font-mono-num text-gray-700">
                     {u.phone_number}
                   </td>
                   <td className="px-6 py-3">
@@ -164,6 +176,12 @@ function Th({ children, align = "left" }) {
       {children}
     </th>
   );
+}
+
+function getInitials(name) {
+  if (!name) return "?";
+  const parts = String(name).trim().split(/\s+/).slice(0, 2);
+  return parts.map((p) => p[0]).join("").toUpperCase() || "?";
 }
 
 function SkeletonRows({ cols = 4, rows = 6 }) {

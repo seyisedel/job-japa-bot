@@ -32,6 +32,8 @@ export default function App() {
     setError(null);
     try {
       const [u, p] = await Promise.all([fetchUsers(), fetchPayments()]);
+      // Reflect that we tried to talk to Supabase, even if it errored.
+      if (!USE_MOCK_DATA) setSource("supabase");
       if (u.error) throw u.error;
       if (p.error) throw p.error;
       setUsers(u.data);
@@ -40,6 +42,7 @@ export default function App() {
       setLastUpdated(new Date());
     } catch (e) {
       setError(e.message || "Failed to load data. Check Supabase configuration.");
+      setLastUpdated(new Date());
     } finally {
       setLoading(false);
     }
@@ -158,10 +161,48 @@ export default function App() {
         {error && (
           <div
             data-testid="error-banner"
-            className="mb-6 flex items-start gap-3 border border-red-200 bg-red-50 text-red-800 rounded-sm px-4 py-3"
+            className="mb-6 border border-red-200 bg-red-50 text-red-900 rounded-sm px-4 py-3"
           >
-            <AlertTriangle size={16} className="mt-0.5" />
-            <div className="text-sm">{error}</div>
+            <div className="flex items-start gap-3">
+              <AlertTriangle size={16} className="mt-0.5 flex-shrink-0" />
+              <div className="text-sm">
+                <div className="font-semibold">Couldn&apos;t load data from Supabase.</div>
+                <div className="mt-1 text-red-800">{error}</div>
+                {/PGRST205|schema cache|does not exist|Could not find the table/i.test(
+                  error
+                ) && (
+                  <details className="mt-3">
+                    <summary className="cursor-pointer text-sm font-semibold text-red-900 hover:underline">
+                      Missing tables? Run this SQL in Supabase → SQL Editor
+                    </summary>
+                    <pre className="mt-2 text-xs bg-white/70 border border-red-200 rounded-sm p-3 overflow-x-auto font-mono-num whitespace-pre">{`create table if not exists public.users (
+  id uuid primary key default gen_random_uuid(),
+  name text,
+  phone_number text not null,
+  subscription_status text not null default 'free',
+  cv_rewrites_used int not null default 0,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.payments (
+  id uuid primary key default gen_random_uuid(),
+  reference text not null unique,
+  amount numeric not null,
+  type text not null,
+  status text not null,
+  created_at timestamptz not null default now()
+);
+
+-- Allow the anon key to read (admin dashboard).
+-- For production add proper RLS + admin auth.
+alter table public.users enable row level security;
+alter table public.payments enable row level security;
+create policy "read users" on public.users for select using (true);
+create policy "read payments" on public.payments for select using (true);`}</pre>
+                  </details>
+                )}
+              </div>
+            </div>
           </div>
         )}
 
