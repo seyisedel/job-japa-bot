@@ -49,9 +49,26 @@ const seedUsers = () => {
 
 const seedPayments = () => {
   const rows = [];
+  const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  const isoInCurrentMonth = () => {
+    const d = new Date(monthStart);
+    const daysIntoMonth = Math.min(
+      Math.max(0, Math.floor((now - monthStart) / (1000 * 60 * 60 * 24))),
+      27
+    );
+    d.setDate(d.getDate() + rand(0, daysIntoMonth));
+    d.setHours(rand(0, 23), rand(0, 59), rand(0, 59), 0);
+    return d.toISOString();
+  };
+
   for (let i = 0; i < 68; i++) {
     const type = pick(PAY_TYPES);
-    const status = pick(PAY_STATUSES);
+    // First 18 payments: successful and dated within the current month so the
+    // "Monthly Revenue" stat has a meaningful value in preview/mock mode.
+    const forceCurrentMonthSuccess = i < 18;
+    const status = forceCurrentMonthSuccess ? "success" : pick(PAY_STATUSES);
     const amount =
       type === "pro_yearly"
         ? 25000
@@ -66,7 +83,7 @@ const seedPayments = () => {
       amount,
       type,
       status,
-      created_at: isoDate(120),
+      created_at: forceCurrentMonthSuccess ? isoInCurrentMonth() : isoDate(120),
     });
   }
   return rows.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
