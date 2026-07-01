@@ -1,0 +1,119 @@
+{
+  "project_name": "JobJapa Admin Dashboard",
+  "theme": "light",
+  "archetype": "Archetype 4 (Swiss & High-Contrast) blended with Archetype 1 (Organic & Earthy)",
+  "vibe_and_concept": "A professional, highly operational dashboard for a Nigerian career-migration platform ('Japa'). It must feel authoritative, secure, and data-dense, while utilizing a distinctive color palette inspired by Nigerian vitality (Deep Emerald and Vibrant Ochre) to break away from generic tech blues. Focus is on clarity, scanning efficiency, and WCAG accessibility.",
+  "colors": {
+    "background": {
+      "main": "#FAFAFA",
+      "surface": "#FFFFFF",
+      "surface_hover": "#F3F4F6",
+      "header_dark": "#064E3B"
+    },
+    "text": {
+      "primary": "#111827",
+      "secondary": "#4B5563",
+      "tertiary": "#9CA3AF",
+      "inverse": "#FFFFFF",
+      "currency": "#064E3B"
+    },
+    "brand": {
+      "primary": "#064E3B",
+      "primary_hover": "#047857",
+      "accent": "#D97706",
+      "accent_hover": "#B45309"
+    },
+    "status": {
+      "success_bg": "#ECFDF5",
+      "success_text": "#059669",
+      "success_border": "#A7F3D0",
+      "warning_bg": "#FFFBEB",
+      "warning_text": "#D97706",
+      "warning_border": "#FDE68A",
+      "danger_bg": "#FEF2F2",
+      "danger_text": "#DC2626",
+      "danger_border": "#FECACA",
+      "neutral_bg": "#F3F4F6",
+      "neutral_text": "#4B5563"
+    },
+    "border": {
+      "default": "#E5E7EB",
+      "focus": "#064E3B"
+    }
+  },
+  "typography": {
+    "fonts": {
+      "heading": "Outfit",
+      "body": "IBM Plex Sans",
+      "mono": "IBM Plex Mono"
+    },
+    "scale": {
+      "h1": "text-3xl font-bold tracking-tight text-gray-900",
+      "h2": "text-2xl font-bold tracking-tight text-gray-900",
+      "h3": "text-xl font-semibold text-gray-900",
+      "h4": "text-lg font-medium text-gray-900",
+      "body": "text-sm text-gray-700 leading-relaxed",
+      "label": "text-xs font-semibold uppercase tracking-wider text-gray-500",
+      "data_value": "text-base font-medium text-gray-900",
+      "currency_value": "text-lg font-bold text-emerald-900"
+    },
+    "anti_patterns": [
+      "Do not use Inter, Roboto, or generic sans-serif for headings.",
+      "Never center-align numeric data; always right-align.",
+      "Do not use light font weights for data labels."
+    ]
+  },
+  "layout_and_spacing": {
+    "grid_system": "The 'Control Room' Grid - grid-cols-1 md:grid-cols-3 lg:grid-cols-4 for stats. gap-6 for macro layout, gap-4 for micro components.",
+    "spacing_scale": "Tailwind default scale. Padding inside cards should be p-6. Container padding p-8.",
+    "surfaces": "Cardless or sharp corners. Use rounded-sm or rounded-none. No soft drop shadows. Use 1px solid border (#E5E7EB) to define surfaces.",
+    "table_patterns": [
+      "Row Height: 48px for comfortable scanning.",
+      "Alignment: Text left-aligned, Numbers/Currency right-aligned, Status Badges center-aligned.",
+      "Sticky Header: Solid background (bg-gray-50 or bg-emerald-900) with high contrast text.",
+      "Borders: border-b border-gray-200 on rows. No vertical dividers."
+    ]
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-[#064E3B] text-white hover:bg-[#047857] rounded-sm px-4 py-2 font-medium transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-[#064E3B]",
+      "secondary": "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 rounded-sm px-4 py-2 font-medium transition-colors"
+    },
+    "cards": {
+      "stats": "bg-white border border-gray-200 rounded-sm p-6 flex flex-col justify-between"
+    },
+    "badges": {
+      "default": "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+    },
+    "navigation": {
+      "sidebar": "bg-white border-r border-gray-200 flex flex-col gap-2 p-4",
+      "header": "bg-white border-b border-gray-200 h-16 px-6 flex items-center justify-between"
+    },
+    "icons": {
+      "library": "lucide-react",
+      "usage": "Use icons to support text labels, never as the sole indicator of status or action."
+    }
+  },
+  "interactions_and_motion": {
+    "hover_states": "Crisp and immediate. Darken backgrounds by one shade or increase border contrast. Text colors must remain high-contrast on hover.",
+    "focus_states": "Accessibility ring required (focus:ring-2 focus:ring-emerald-800).",
+    "animations": "Minimal. 150ms ease-in-out for color transitions on buttons and rows."
+  },
+  "media_and_assets": {
+    "empty_states_bg": {
+      "url": "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMG1pbmltYWwlMjBnZW9tZXRyaWMlMjB0ZXh0dXJlJTIwbGlnaHR8ZW58MHx8fHwxNzgyOTE1NTM3fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Abstract white geometric wave texture, ideal for an extremely subtle background watermark or empty state illustration."
+    }
+  },
+  "testing_requirements": {
+    "attributes": "All interactive and key informational elements MUST include a data-testid attribute in kebab-case."
+  },
+  "instructions_to_main_agent": [
+    "Strictly avoid 'Inter' font for headings; use Outfit (import from Google Fonts).",
+    "Implement Supabase integration using the official @supabase/supabase-js client.",
+    "Ensure the dashboard displays a 'Users' table and a 'Payments' table with functional pagination and filtering.",
+    "Stats header must dynamically calculate and show 'Total Users', 'Total Pro Subscribers', and 'Monthly Revenue' formatted in Nigerian Naira (₦).",
+    "Avoid Shadcn 'Card' wrappers if they force unwanted soft border-radius/shadows. Strip them down to sharp, 1px border elements as defined in layout_and_spacing.",
+    "Add 'data-testid' to all buttons, table rows, filter inputs, and stat cards."
+  ]
+}
