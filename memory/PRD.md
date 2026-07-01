@@ -26,15 +26,15 @@ Build a web admin dashboard for a Nigerian career services app called **JobJapa*
 
 ## What's Been Implemented (2026-07-01)
 - Distinctive design system per `/app/design_guidelines.json`: Deep Emerald + Ochre palette, Outfit + IBM Plex Sans, sharp 1px-border surfaces
-- Sticky top nav with brand, data-source indicator (Mock preview vs Supabase live), and Refresh action
+- Sticky top nav with brand, data-source indicator (Mock preview vs Supabase live), Refresh action, and signed-in user menu with sign-out
 - Preview-mode banner explaining how to swap in real Supabase creds
 - Three stat cards with icons and helper text (Total Users, Pro Subscribers, Monthly Revenue)
-- Users table: **Name (with initials avatar)**, phone, subscription badge, CV rewrites, joined date. Search covers name + phone. Status filter (All/Pro/Free/Expired). Pagination.
-- Payments table: search (reference), status filter (All/Success/Pending/Failed), pagination (10/page)
-- Skeleton loaders, empty-state rows, error banner
-- **Auto-fallback** in `fetchUsers()`: if Supabase reports `name` column missing, retries without it
-- **Friendly error banner** with copy-pasteable SQL to create `users` + `payments` tables when Supabase returns "table not found"
+- Users table: **Name (with initials avatar)**, phone, subscription badge, CV rewrites, joined date. Search covers name + phone. Status filter. Pagination.
+- Payments table: search (reference), status filter, pagination (10/page)
+- Skeleton loaders, empty-state rows, error banner with copy-pasteable SQL when tables are missing
 - Full data-testid coverage
+- **Admin login (Supabase Auth email/password)** — protects the dashboard when connected to real Supabase. Client-side email whitelist via `REACT_APP_ADMIN_EMAILS`. 15-minute inactivity timeout + 8-hour absolute session lifetime enforced via client-side timers on top of Supabase's own session refresh
+- Auto-fallback in `fetchUsers()` if `name` column is missing
 - Backend `/api/health` endpoint (supervisor liveness only)
 
 ## Live Supabase

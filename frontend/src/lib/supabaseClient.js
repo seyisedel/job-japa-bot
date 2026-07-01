@@ -13,5 +13,10 @@ export const USE_MOCK_DATA =
 export const supabase = USE_MOCK_DATA
   ? null
   : createClient(supabaseUrl, supabaseAnonKey, {
-      auth: { persistSession: false },
+      auth: {
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: true,
+        storageKey: "jobjapa.admin.auth",
+      },
     });

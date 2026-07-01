@@ -6,10 +6,13 @@ import {
   RefreshCw,
   Database,
   AlertTriangle,
+  LogOut,
+  UserCircle2,
 } from "lucide-react";
 import StatCard from "./components/StatCard";
 import UsersTable from "./components/UsersTable";
 import PaymentsTable from "./components/PaymentsTable";
+import LoginPage from "./components/LoginPage";
 import {
   computeStats,
   fetchPayments,
@@ -17,15 +20,48 @@ import {
   formatNaira,
 } from "./lib/api";
 import { USE_MOCK_DATA } from "./lib/supabaseClient";
+import { useAdminAuth } from "./hooks/useAdminAuth";
 import "./App.css";
 
 export default function App() {
+  const {
+    session,
+    ready: authReady,
+    notice: authNotice,
+    signIn,
+    signOut,
+  } = useAdminAuth();
+
+  // In mock mode we skip auth entirely so the preview stays browsable.
+  const authRequired = !USE_MOCK_DATA;
+  const isAuthed = !authRequired || !!session;
+
+  if (authRequired && !authReady) {
+    return (
+      <div
+        data-testid="auth-loading"
+        className="min-h-screen bg-[#FAFAFA] grid place-items-center text-sm text-gray-500 font-body"
+      >
+        Loading…
+      </div>
+    );
+  }
+
+  if (!isAuthed) {
+    return <LoginPage onSignIn={signIn} notice={authNotice} />;
+  }
+
+  return <Dashboard session={session} onSignOut={signOut} />;
+}
+
+function Dashboard({ session, onSignOut }) {
   const [users, setUsers] = useState([]);
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [source, setSource] = useState("mock");
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -102,6 +138,50 @@ export default function App() {
               />
               Refresh
             </button>
+            {session && (
+              <div className="relative">
+                <button
+                  data-testid="user-menu-btn"
+                  onClick={() => setMenuOpen((v) => !v)}
+                  className="inline-flex items-center gap-2 border border-gray-300 rounded-sm px-3 py-2 text-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand"
+                >
+                  <UserCircle2 size={16} className="text-brand" />
+                  <span className="hidden md:inline max-w-[180px] truncate">
+                    {session.user?.email}
+                  </span>
+                </button>
+                {menuOpen && (
+                  <div
+                    data-testid="user-menu"
+                    className="absolute right-0 mt-1 w-64 bg-white border border-gray-200 rounded-sm shadow-sm z-30"
+                    onMouseLeave={() => setMenuOpen(false)}
+                  >
+                    <div className="px-4 py-3 border-b border-gray-100">
+                      <div className="text-[11px] uppercase tracking-[0.14em] text-gray-500">
+                        Signed in as
+                      </div>
+                      <div
+                        data-testid="user-menu-email"
+                        className="text-sm font-medium text-gray-900 truncate"
+                      >
+                        {session.user?.email}
+                      </div>
+                    </div>
+                    <button
+                      data-testid="sign-out-btn"
+                      onClick={() => {
+                        setMenuOpen(false);
+                        onSignOut();
+                      }}
+                      className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      <LogOut size={14} />
+                      Sign out
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </header>
