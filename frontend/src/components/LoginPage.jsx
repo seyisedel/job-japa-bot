@@ -169,14 +169,6 @@ export default function LoginPage({ onSignIn, notice }) {
             then restart the frontend.
           </div>
         )}
-
-        <div className="mt-6 text-center text-xs text-gray-500">
-          Admin users are provisioned in{" "}
-          <span className="font-semibold text-gray-700">
-            Supabase → Authentication → Users
-          </span>
-          .
-        </div>
       </div>
     </div>
   );
