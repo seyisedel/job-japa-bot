@@ -147,7 +147,7 @@ export default function LoginPage({ onSignIn, notice }) {
             </button>
           </form>
 
-          <div className="mt-6 pt-5 border-t border-gray-100">
+          {/* <div className="mt-6 pt-5 border-t border-gray-100">
             <div className="text-[11px] uppercase tracking-[0.14em] text-gray-500 mb-2">
               Session policy
             </div>
@@ -155,7 +155,7 @@ export default function LoginPage({ onSignIn, notice }) {
               <li>15 minutes of inactivity signs you out.</li>
               <li>Sessions expire after 8 hours regardless of activity.</li>
             </ul>
-          </div>
+          </div> */}
         </div>
 
         {ADMIN_EMAILS_LIST.length === 0 && (
